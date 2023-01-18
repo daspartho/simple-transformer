@@ -34,5 +34,7 @@ if __name__=="__main__":
     q = torch.Tensor([[0,10,0],[0,0,10],[10,10,0]])
 
     out, attn = scaled_dot_product_attention(q, k, v, d=4)
-    print('Attention weights:',attn.round(decimals=3))
-    print('Output:',out.round(decimals=3))
+    print('Attention weights:')
+    print(attn.round(decimals=3))
+    print('Output:')
+    print(out.round(decimals=3))
