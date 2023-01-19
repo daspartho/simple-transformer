@@ -60,6 +60,21 @@ class ResidualLayerNorm(nn.Module):
     def forward(self, x, residual):
         return self.layer_norm(self.dropout(x)+residual)
 
+class PWFFN(nn.Module):
+
+    def __init__(self, d_model, d_ff, dropout=0.3):
+        super().__init__()
+
+        self.ff = nn.Sequential(
+            nn.Linear(d_model, d_ff),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_ff, d_model)
+        )
+
+    def forward(self, x):
+        return self.ff(x)
+
 if __name__=="__main__":
 
     toy_encodings = torch.Tensor([
@@ -81,3 +96,8 @@ if __name__=="__main__":
     toy_norm = toy_norm_layer(toy_MHA, toy_encodings)
     print("Toy Norm: \n", toy_norm)
     print("Toy Norm Shape: \n", toy_norm.shape)
+
+    toy_PWFFN_layer = PWFFN(d_model=4, d_ff=16)
+    toy_PWFFN = toy_PWFFN_layer(toy_norm)
+    print("Toy PWFFN: \n", toy_PWFFN)
+    print("Toy PWFFN Shape: \n", toy_PWFFN.shape)
